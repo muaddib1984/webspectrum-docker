@@ -1,0 +1,3 @@
+[submodule "gr-webspectrum"]
+	path = gr-webspectrum
+	url = https://github.com/muaddib1984/gr-webspectrum
