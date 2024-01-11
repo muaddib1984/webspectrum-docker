@@ -1,0 +1,21 @@
+This is a convenience repo to showcase the gr-webspectrum module as the datasource for a web-based waterfall. When built, a Docker image is produced that contains GNURadio, the gr-webspectrum module, a Redis backend and Uvicorn ASGI webserver.
+This repo links to gr-webspectrum as a submodule. (https://github.com/muaddib1984/gr-webspectrum). More details can be found there.
+Docker Container Basic Contents:
+-Alpine Linux
+-GNURadio 3.10.7
+-gr-webspectrum
+-redis
+-uvicorn
+
+to build, run:
+docker build -t webspectrum .
+
+to run:
+docker run -p 8000:8000 webspectrum
+
+navigate to 0.0.0.0:8000 to see the keyboard shortcuts, click "start viewing spectrum" to see the spectral display
+-or-
+navigate to 0.0.0.0:8000/spectral to see the spectrum directly
+
+
+
