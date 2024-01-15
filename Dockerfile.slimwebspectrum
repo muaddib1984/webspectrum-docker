@@ -1,0 +1,65 @@
+# clone https://github.com/muaddib1984/gr-webspectrum to the same directory as this Dockerfile
+
+FROM python:3.11-alpine AS build
+RUN apk update
+ENV PYTHONPATH "${PYTHONPATH}:/usr/lib/python3.11/site-packages:/usr/lib/python3.11/dist-packages:/usr/local/lib/python3.11/site-packages"
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib"
+ENV PYTHON_INCLUDE_DIRS=/usr/local/lib/python3.11/site-packages/numpy/core/include
+RUN apk add --no-cache cmake \
+	    make \
+        g++ \
+	    gcc \
+	    dpkg \
+	    pkgconfig \
+        git \
+	    nano \
+	    redis \
+        boost-dev \
+        gsl \
+        mpir \
+        fftw-dev \
+        cppzmq \
+        py3-pybind11-dev \
+        gmp-dev \
+        spdlog-dev \
+        ccmake \
+        libvolk-dev --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community && \
+	    pip install sse-starlette redis numpy packaging
+
+RUN git clone https://github.com/gnuradio/gnuradio
+RUN cd gnuradio && mkdir build && cd build && \
+        cmake \
+        -DENABLE_MANPAGES=OFF \
+        -DENABLE_POSTINSTALL=OFF \
+        -DENABLE_GR_CTRLPORT=OFF \
+        -DENABLE_TESTING=OFF \
+        -DENABLE_GR_DTV=OFF \
+        -DENABLE_GR_AUDIO=OFF \
+        -DENABLE_GR_CHANNELS=OFF \
+        -DENABLE_GR_VOCODER=OFF \
+        -DENABLE_GR_BLOCKTOOL=OFF \
+        -DENABLE_GR_TRELLIS=OFF \
+        ..
+RUN cd gnuradio/build && make -j8 && make install
+
+COPY gr-webspectrum /root/gr-webspectrum
+RUN ldconfig /etc/ld.so.conf.d && cp -r /root/gr-webspectrum/server /root && cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster.py /root && cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster_epy_broadcaster_block.py /root && rm -rf /root/gr-webspectrum
+#RUN	cd /root/gr-webspectrum && rm -rf build && mkdir build && \
+#	cd build && \
+#	cmake .. && \
+#	make && \
+#	make install && \
+#	ldconfig /etc/ld.so.conf.d
+
+
+FROM python:3.11-alpine AS deploy
+ENV PYTHONPATH "${PYTHONPATH}:/usr/lib/python3.11/site-packages:/usr/lib/python3.11/dist-packages:/usr/local/lib/python3.11/site-packages"
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib"
+RUN apk update && apk add boost-program_options boost-regex boost-unit_test_framework boost-thread spdlog gmp-dev libvolk fftw redis
+# copy necessary binaries libs from build stage
+COPY --from=build /root/ /root/
+COPY --from=build /usr/local/ /usr/local
+COPY --from=build /usr/local/bin/ /usr/local/bin
+
+ENTRYPOINT ["/bin/sh", "-c", "cd /root/server && (redis-server --port 6379 &) && (uvicorn --host 0.0.0.0 --port 8000 app.main:app &) && python3 /root/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster.py"]
+
