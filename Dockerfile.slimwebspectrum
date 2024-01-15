@@ -43,7 +43,20 @@ RUN cd gnuradio && mkdir build && cd build && \
 RUN cd gnuradio/build && make -j8 && make install
 
 COPY gr-webspectrum /root/gr-webspectrum
-RUN ldconfig /etc/ld.so.conf.d && cp -r /root/gr-webspectrum/server /root && cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster.py /root && cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster_epy_broadcaster_block.py /root && rm -rf /root/gr-webspectrum
+RUN ldconfig /etc/ld.so.conf.d && \
+    cp -r /root/gr-webspectrum/server /root && \
+    cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster.py /root && \
+    cp /root/gr-webspectrum/examples/RTLSDR_or_fake_signal_to_fft_to_epy_broadcaster_epy_broadcaster_block.py /root && \
+    rm -rf /root/gr-webspectrum && \
+    rm -rf /root/.cache && \
+    rm -rf /usr/local/lib/python3.11/lib2to3 && \
+    rm -rf /usr/local/lib/python3.11/__pycache__ && \
+    rm -rf /usr/local/lib/pip && \
+    rm -rf /usr/local/lib/tkinter && \
+    rm -rf /usr/local/lib/python3.11/ensurepip && \
+    rm -rf /var/cache/* && \
+    find / | grep -E "(__pycache__|\.pyc|\.pyo$)" |xargs rm -rf
+
 #RUN	cd /root/gr-webspectrum && rm -rf build && mkdir build && \
 #	cd build && \
 #	cmake .. && \
