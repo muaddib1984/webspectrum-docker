@@ -22,7 +22,7 @@ Multi-Stage Build basic Contents:
 
 to build, run:
 
-```docker build -t webspectrum_build --target webspectrum_build -f Dockerfile .```
+```docker build -t webspectrum_build --target build -f Dockerfile .```
 
 to run container, run:
 
@@ -40,11 +40,11 @@ Build Image Size: ~1.6GB
 
 to build, run:
 
-```docker build -t webspectrum_deploy --target webspectrum_deploy -f Dockerfile .```
+```docker build -t webspectrum_deploy --target deploy -f Dockerfile .```
 
 to run container, run:
 
-```docker run --name webspectrum_deploy -p 8000:8000 webspectrum```
+```docker run --name webspectrum_deploy -p 8000:8000 webspectrum_deploy```
 
 "Deploy" Image size: ~500MB
 
@@ -62,7 +62,7 @@ Multi-Stage Build basic Contents:
 
 to build, run:
 
-```docker build -t slimwebspectrum_build --target webspectrum_build -f Dockerfile.slimwebspectrum .```
+```docker build -t slimwebspectrum_build --target build -f Dockerfile.slimwebspectrum .```
 
 to run container, run:
 
@@ -79,7 +79,7 @@ Build Image size: ~4.2GB
 
 to build, run:
 
-```docker build -t webspectrum_deploy --target webspectrum_deploy -f Dockerfile.slimwebspectrum .```
+```docker build -t slimwebspectrum_deploy --target deploy -f Dockerfile.slimwebspectrum .```
 
 to run container, run:
 
