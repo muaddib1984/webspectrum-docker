@@ -1,15 +1,34 @@
-## WebSpectrum Docker
+## **WebSpectrum Docker**
 This is a convenience repo to showcase the gr-webspectrum module connecting a GNURadio flowgraph to a web-based waterfall/spectrum display. When built, a Docker image is produced that contains GNURadio, the gr-webspectrum module, a Redis backend and Uvicorn ASGI webserver.
 This repo links to gr-webspectrum as a submodule (https://github.com/muaddib1984/gr-webspectrum). More details can be found there.
 
-### Image Options
+## **Quick Start**
+### Pull the image from DockerHub
+
+```docker pull muaddib1984/alpine_gnuradio_webspectrum:slimwebspectrum_deploy```
+### **Run the Container**
+
+```docker run -dt --name slimwebspectrum_deploy -p 8000:8000```
+
+### **Connect to the container**
+
+Open a web browser to http://127.0.0.1:8000/spectral/
+you should see this:
+
+### **Stop the Container**
+
+```docker stop slimwebspectrum_deploy```
+
+### **Image Options**
 There are 2 Dockerfile's that both use Multi-Stage Builds. Each produces the same functionality to the user, however each provides different flexibility for development. 
+
+NOTE: You do not have to build each stage independently. The steps needed to build the individual stages are shown for verbosity and development.
 
 ```Dockerfile``` uses Alpine APK packages of GNURadio 3.10.7 adn produces a 'deploy' image that is ~500MB. This image can also use OOT modules, provided they are built in the 'build' stage and necessary libs are copied over to the 'deploy' stage.
 
 ```Dockerfile.slimwebspectrum``` build stage compiles a minimal version of GNURadio that includes only in-tree modules needed by  ```gr-webspectrum```. The ```Dockerfile.slimwebspectrum``` also uses an Embedded Python Block version of the ```gr-webspectrum``` ```Broadcaster``` block so that only in-tree modules are required for runtime. This produces a 'deploy' image that is ~250MB (about half the size of the ```Dockerfile```'s webspectrum 'deploy' image).
 
-### **Dockerfile**
+### **Dockerfile(s)**
 Multi-Stage Build basic Contents:
 
 #### **"build" stage**
@@ -24,7 +43,7 @@ to build, run:
 
 ```docker build -t webspectrum_build --target build -f Dockerfile .```
 
-to run container, run:
+to run the container, run:
 
 ```docker run --name webspectrum_build -p 8000:8000 webspectrum_build ```
 
