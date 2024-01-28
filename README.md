@@ -12,14 +12,19 @@ This repo links to gr-webspectrum as a submodule (https://github.com/muaddib1984
 
 ### **Connect to the container**
 
-Open a web browser to http://127.0.0.1:8000/spectral/
+Open a web browser to http://127.0.0.1:8000
 you should see this:
+![](/img/mainpage.png)
+
+clicking on the 'start viewing spectrum' button will show this
+
+![](/img/spectralpage.png)
 
 ### **Stop the Container**
 
 ```docker stop slimwebspectrum_deploy```
 
-### **Image Options**
+## **Building Images**
 There are 2 Dockerfile's that both use Multi-Stage Builds. Each produces the same functionality to the user, however each provides different flexibility for development. 
 
 NOTE: You do not have to build each stage independently. The steps needed to build the individual stages are shown for verbosity and development.
