@@ -8,7 +8,7 @@ This repo links to gr-webspectrum as a submodule (https://github.com/muaddib1984
 ```docker pull muaddib1984/alpine_gnuradio_webspectrum:slimwebspectrum_deploy```
 ### **Run the Container**
 
-```docker run -dt --name slimwebspectrum_deploy -p 8000:8000```
+```docker run -dt --name slimwebspectrum_deploy -p 8000:8000 muaddib1984/alpine_gnuradio_webspectrum:slimwebspectrum_deploy```
 
 ### **Connect to the container**
 
