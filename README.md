@@ -29,7 +29,7 @@ There are 2 Dockerfile's that both use Multi-Stage Builds. Each produces the sam
 
 NOTE: You do not have to build each stage independently. The steps needed to build the individual stages are shown for verbosity and development.
 
-```Dockerfile``` uses Alpine APK packages of GNURadio 3.10.7 adn produces a 'deploy' image that is ~500MB. This image can also use OOT modules, provided they are built in the 'build' stage and necessary libs are copied over to the 'deploy' stage.
+```Dockerfile``` uses Alpine APK packages of GNURadio 3.10.7 and produces a 'deploy' image that is ~500MB. This image can also use OOT modules, provided they are built in the 'build' stage and necessary libs are copied over to the 'deploy' stage.
 
 ```Dockerfile.slimwebspectrum``` build stage compiles a minimal version of GNURadio that includes only in-tree modules needed by  ```gr-webspectrum```. The ```Dockerfile.slimwebspectrum``` also uses an Embedded Python Block version of the ```gr-webspectrum``` ```Broadcaster``` block so that only in-tree modules are required for runtime. This produces a 'deploy' image that is ~250MB (about half the size of the ```Dockerfile```'s webspectrum 'deploy' image).
 
